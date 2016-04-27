@@ -14,7 +14,7 @@ videoSlider.showInView(view)
 // Video Trimming
 VideoTrimmer.trimFile(videoPath, 
                         outputFilePath: videoOutputPath,
-                        startTime: slider.leftPosition,
+                        startTime: videoSlider.leftPosition,
                         durationTime: CMTimeSubtract(videoSlider.rightPosition, videoSlider.leftPosition)) { (success) in
                         }
 
