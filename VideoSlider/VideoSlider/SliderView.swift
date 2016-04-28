@@ -74,7 +74,7 @@ class SliderView: UIView {
         let bubbleFrame = self.bounds
         
         //// Rounded Rectangle Drawing
-        let roundedRectangleRect = CGRect(x: CGRectGetMinX(bubbleFrame), y: CGRectGetMinY(bubbleFrame),
+        let roundedRectangleRect = CGRect(x: bubbleFrame.minX, y: bubbleFrame.minY,
                                           width: bubbleFrame.width, height: bubbleFrame.height)
 
         let roundedRectanglePath = UIBezierPath(roundedRect: roundedRectangleRect, byRoundingCorners: leftCorners ?
@@ -86,8 +86,8 @@ class SliderView: UIView {
         CGContextSaveGState(context)
         roundedRectanglePath.addClip()
         CGContextDrawLinearGradient(context, gradient3,
-                                    CGPoint(x: CGRectGetMidX(roundedRectangleRect), y: CGRectGetMinY(roundedRectangleRect)),
-                                    CGPoint(x: CGRectGetMidX(roundedRectangleRect), y: CGRectGetMaxY(roundedRectangleRect)),
+                                    CGPoint(x: roundedRectangleRect.midX, y: roundedRectangleRect.minY),
+                                    CGPoint(x: roundedRectangleRect.midX, y: roundedRectangleRect.maxY),
                                     CGGradientDrawingOptions(rawValue: 0))
         
         CGContextRestoreGState(context)
@@ -98,24 +98,24 @@ class SliderView: UIView {
         
         //// Bezier 3 Drawing
         let bezier3Path = UIBezierPath()
-        bezier3Path.moveToPoint(CGPoint(x: CGRectGetMinX(bubbleFrame) + 0.42806 * bubbleFrame.width,
-                                        y: CGRectGetMinY(bubbleFrame) + 0.22486 * bubbleFrame.height))
-        bezier3Path.addCurveToPoint(CGPoint(x: CGRectGetMinX(bubbleFrame) + 0.42806 * bubbleFrame.width,
-                                            y: CGRectGetMinY(bubbleFrame) + 0.74629 * bubbleFrame.height),
-                                    controlPoint1: CGPoint(x: CGRectGetMinX(bubbleFrame) + 0.42806 * bubbleFrame.width,
-                                                            y: CGRectGetMinY(bubbleFrame) + 0.69415 * bubbleFrame.height),
-                                    controlPoint2: CGPoint(x: CGRectGetMinX(bubbleFrame) + 0.42806 * bubbleFrame.width,
-                                                            y: CGRectGetMinY(bubbleFrame) + 0.69415 * bubbleFrame.height))
-        bezier3Path.addLineToPoint(CGPoint(x: CGRectGetMinX(bubbleFrame) + 0.35577 * bubbleFrame.width,
-                                            y: CGRectGetMinY(bubbleFrame) + 0.74629 * bubbleFrame.height))
-        bezier3Path.addCurveToPoint(CGPoint(x: CGRectGetMinX(bubbleFrame) + 0.35577 * bubbleFrame.width,
-                                            y: CGRectGetMinY(bubbleFrame) + 0.22486 * bubbleFrame.height),
-                                    controlPoint1: CGPoint(x: CGRectGetMinX(bubbleFrame) + 0.35577 * bubbleFrame.width,
-                                                            y: CGRectGetMinY(bubbleFrame) + 0.69415 * bubbleFrame.height),
-                                    controlPoint2: CGPoint(x: CGRectGetMinX(bubbleFrame) + 0.35577 * bubbleFrame.width,
-                                                            y: CGRectGetMinY(bubbleFrame) + 0.69415 * bubbleFrame.height))
-        bezier3Path.addLineToPoint(CGPoint(x: CGRectGetMinX(bubbleFrame) + 0.42806 * bubbleFrame.width,
-                                            y: CGRectGetMinY(bubbleFrame) + 0.22486 * bubbleFrame.height))
+        bezier3Path.moveToPoint(CGPoint(x: bubbleFrame.minX + 0.42806 * bubbleFrame.width,
+                                        y: bubbleFrame.minY + 0.22486 * bubbleFrame.height))
+        bezier3Path.addCurveToPoint(CGPoint(x: bubbleFrame.minX + 0.42806 * bubbleFrame.width,
+                                            y: bubbleFrame.minY + 0.74629 * bubbleFrame.height),
+                                    controlPoint1: CGPoint(x: bubbleFrame.minX + 0.42806 * bubbleFrame.width,
+                                                            y: bubbleFrame.minY + 0.69415 * bubbleFrame.height),
+                                    controlPoint2: CGPoint(x: bubbleFrame.minX + 0.42806 * bubbleFrame.width,
+                                                            y: bubbleFrame.minY + 0.69415 * bubbleFrame.height))
+        bezier3Path.addLineToPoint(CGPoint(x: bubbleFrame.minX + 0.35577 * bubbleFrame.width,
+                                            y: bubbleFrame.minY + 0.74629 * bubbleFrame.height))
+        bezier3Path.addCurveToPoint(CGPoint(x: bubbleFrame.minX + 0.35577 * bubbleFrame.width,
+                                            y: bubbleFrame.minY + 0.22486 * bubbleFrame.height),
+                                    controlPoint1: CGPoint(x: bubbleFrame.minX + 0.35577 * bubbleFrame.width,
+                                                            y: bubbleFrame.minY + 0.69415 * bubbleFrame.height),
+                                    controlPoint2: CGPoint(x: bubbleFrame.minX + 0.35577 * bubbleFrame.width,
+                                                            y: bubbleFrame.minY + 0.69415 * bubbleFrame.height))
+        bezier3Path.addLineToPoint(CGPoint(x: bubbleFrame.minX + 0.42806 * bubbleFrame.width,
+                                            y: bubbleFrame.minY + 0.22486 * bubbleFrame.height))
         
         bezier3Path.closePath()
         bezier3Path.miterLimit = 19
@@ -125,24 +125,24 @@ class SliderView: UIView {
         
         //// Bezier Drawing
         let bezierPath = UIBezierPath()
-        bezierPath.moveToPoint(CGPoint(x: CGRectGetMinX(bubbleFrame) + 0.66944 * bubbleFrame.width,
-                                        y: CGRectGetMinY(bubbleFrame) + 0.22486 * bubbleFrame.height))
-        bezierPath.addCurveToPoint(CGPoint(x: CGRectGetMinX(bubbleFrame) + 0.66944 * bubbleFrame.width,
-                                            y: CGRectGetMinY(bubbleFrame) + 0.74629 * bubbleFrame.height),
-                                   controlPoint1: CGPoint(x: CGRectGetMinX(bubbleFrame) + 0.66944 * bubbleFrame.width,
-                                                            y: CGRectGetMinY(bubbleFrame) + 0.69415 * bubbleFrame.height),
-                                   controlPoint2: CGPoint(x: CGRectGetMinX(bubbleFrame) + 0.66944 * bubbleFrame.width,
-                                                            y: CGRectGetMinY(bubbleFrame) + 0.69415 * bubbleFrame.height))
-        bezierPath.addLineToPoint(CGPoint(x: CGRectGetMinX(bubbleFrame) + 0.59715 * bubbleFrame.width,
-                                            y: CGRectGetMinY(bubbleFrame) + 0.74629 * bubbleFrame.height))
-        bezierPath.addCurveToPoint(CGPoint(x: CGRectGetMinX(bubbleFrame) + 0.59715 * bubbleFrame.width,
-                                            y: CGRectGetMinY(bubbleFrame) + 0.22486 * bubbleFrame.height),
-                                   controlPoint1: CGPoint(x: CGRectGetMinX(bubbleFrame) + 0.59715 * bubbleFrame.width,
-                                                            y: CGRectGetMinY(bubbleFrame) + 0.69415 * bubbleFrame.height),
-                                   controlPoint2: CGPoint(x: CGRectGetMinX(bubbleFrame) + 0.59715 * bubbleFrame.width,
-                                                            y: CGRectGetMinY(bubbleFrame) + 0.69415 * bubbleFrame.height))
-        bezierPath.addLineToPoint(CGPoint(x: CGRectGetMinX(bubbleFrame) + 0.66944 * bubbleFrame.width,
-                                            y: CGRectGetMinY(bubbleFrame) + 0.22486 * bubbleFrame.height))
+        bezierPath.moveToPoint(CGPoint(x: bubbleFrame.minX + 0.66944 * bubbleFrame.width,
+                                        y: bubbleFrame.minY + 0.22486 * bubbleFrame.height))
+        bezierPath.addCurveToPoint(CGPoint(x: bubbleFrame.minX + 0.66944 * bubbleFrame.width,
+                                            y: bubbleFrame.minY + 0.74629 * bubbleFrame.height),
+                                   controlPoint1: CGPoint(x: bubbleFrame.minX + 0.66944 * bubbleFrame.width,
+                                                            y: bubbleFrame.minY + 0.69415 * bubbleFrame.height),
+                                   controlPoint2: CGPoint(x: bubbleFrame.minX + 0.66944 * bubbleFrame.width,
+                                                            y: bubbleFrame.minY + 0.69415 * bubbleFrame.height))
+        bezierPath.addLineToPoint(CGPoint(x: bubbleFrame.minX + 0.59715 * bubbleFrame.width,
+                                            y: bubbleFrame.minY + 0.74629 * bubbleFrame.height))
+        bezierPath.addCurveToPoint(CGPoint(x: bubbleFrame.minX + 0.59715 * bubbleFrame.width,
+                                            y: bubbleFrame.minY + 0.22486 * bubbleFrame.height),
+                                   controlPoint1: CGPoint(x: bubbleFrame.minX + 0.59715 * bubbleFrame.width,
+                                                            y: bubbleFrame.minY + 0.69415 * bubbleFrame.height),
+                                   controlPoint2: CGPoint(x: bubbleFrame.minX + 0.59715 * bubbleFrame.width,
+                                                            y: bubbleFrame.minY + 0.69415 * bubbleFrame.height))
+        bezierPath.addLineToPoint(CGPoint(x: bubbleFrame.minX + 0.66944 * bubbleFrame.width,
+                                            y: bubbleFrame.minY + 0.22486 * bubbleFrame.height))
         
         bezierPath.closePath()
         bezierPath.miterLimit = 19
