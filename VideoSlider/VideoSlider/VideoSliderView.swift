@@ -31,7 +31,6 @@ import UIKit
 import AVFoundation
 
 class VideoSliderView: UIView {
-    internal let videoPath: String
     internal let framesExtractor: FramesExtractorProtocol
     
     internal let leftSlider: SliderView
@@ -46,7 +45,6 @@ class VideoSliderView: UIView {
     private let bottomBorder = UIView(frame: CGRect.zero)
 
     init(frame: CGRect, videoPath: String) {
-        self.videoPath = videoPath
         framesExtractor = FramesExtractor(videoPath: videoPath)
 
         let slider_width = frame.size.width * 0.05
@@ -60,26 +58,24 @@ class VideoSliderView: UIView {
 
         super.init(frame: frame)
         
-        self.addSubview(thumbsView)
-        thumbsView.frame = self.bounds
+        common_init()
+    }
+    
+    init(frame: CGRect, videoAsset: AVAsset) {
+        framesExtractor = FramesExtractor(videoAsset: videoAsset)
         
-        self.addSubview(leftSlider)
-        self.addSubview(rightSlider)
+        let slider_width = frame.size.width * 0.05
+        leftSlider = SliderView(frame: CGRect(x: 0.0, y: 0.0,
+                                                width: slider_width, height: frame.height),
+                                                                    leftCorners: true)
+        rightSlider = SliderView(frame: CGRect(x: frame.size.width - slider_width, y: 0.0,
+                                                width: slider_width, height: frame.height),
+                                                                     leftCorners: false)
+        rightPos = frame.width
         
-        topBorder.frame = CGRect(x: 0.0, y: 0.0, width: frame.width, height: 5.0)
-        topBorder.backgroundColor = UIColor(red: 0.996, green: 0.951, blue: 0.502, alpha: 1)
-        bottomBorder.frame = CGRect(x: 0.0, y: frame.height - 5.0, width: frame.width, height: 5.0)
-        bottomBorder.backgroundColor = UIColor(red: 0.992, green: 0.902, blue: 0.004, alpha: 1)
-        self.addSubview(topBorder)
-        self.addSubview(bottomBorder)
+        super.init(frame: frame)
         
-        leftSlider.addGestureRecognizer(UIPanGestureRecognizer(target: self,
-                                                                action: #selector(VideoSliderView.panLeftSlider(_:))))
-        rightSlider.addGestureRecognizer(UIPanGestureRecognizer(target: self,
-                                                                action: #selector(VideoSliderView.panRightSlider(_:))))
-        
-        self.addSubview(frameThumb)
-        frameThumb.frame = CGRect(x: 0.0, y: -80.0, width: 100.0, height: 100.0)
+        common_init()
     }
     
     override init(frame: CGRect) {
@@ -99,7 +95,31 @@ class VideoSliderView: UIView {
         rightSlider.center = CGPoint(x: rightPos - inset, y: rightSlider.frame.height / 2.0)
     }
     
-    //MARK: Private & Internal
+    //MARK: Private
+    private func common_init() {
+        self.addSubview(thumbsView)
+        thumbsView.frame = self.bounds
+        
+        self.addSubview(leftSlider)
+        self.addSubview(rightSlider)
+        
+        topBorder.frame = CGRect(x: 0.0, y: 0.0, width: frame.width, height: 5.0)
+        topBorder.backgroundColor = UIColor(red: 0.996, green: 0.951, blue: 0.502, alpha: 1)
+        bottomBorder.frame = CGRect(x: 0.0, y: frame.height - 5.0, width: frame.width, height: 5.0)
+        bottomBorder.backgroundColor = UIColor(red: 0.992, green: 0.902, blue: 0.004, alpha: 1)
+        self.addSubview(topBorder)
+        self.addSubview(bottomBorder)
+        
+        leftSlider.addGestureRecognizer(UIPanGestureRecognizer(target: self,
+                                                        action: #selector(VideoSliderView.panLeftSlider(_:))))
+        rightSlider.addGestureRecognizer(UIPanGestureRecognizer(target: self,
+                                                        action: #selector(VideoSliderView.panRightSlider(_:))))
+        
+        self.addSubview(frameThumb)
+        frameThumb.frame = CGRect(x: 0.0, y: -80.0, width: 100.0, height: 100.0)
+    }
+    
+    //MARK: Internal
     internal func addImage(image: UIImage, frame: CGRect) {
         let imageView = UIImageView(image: image)
         imageView.frame = frame

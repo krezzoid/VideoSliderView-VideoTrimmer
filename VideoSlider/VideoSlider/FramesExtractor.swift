@@ -33,19 +33,22 @@ import AVFoundation
 
 class FramesExtractor {
     
-    private let videoPath: String
-    
     private let imageGenerator: AVAssetImageGenerator
     private let videoDuration: Float64
     
     init (videoPath: String) {
-        self.videoPath = videoPath
-        
         let urlAsset = AVURLAsset(URL: NSURL(fileURLWithPath: videoPath), options: nil)
         imageGenerator = AVAssetImageGenerator(asset: urlAsset)
         
         videoDuration = CMTimeGetSeconds(urlAsset.duration)
     }
+    
+    init (videoAsset: AVAsset) {
+        imageGenerator = AVAssetImageGenerator(asset: videoAsset)
+        
+        videoDuration = CMTimeGetSeconds(videoAsset.duration)
+    }
+
 }
 
 extension FramesExtractor: FramesExtractorProtocol {
