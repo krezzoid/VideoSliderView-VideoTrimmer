@@ -35,9 +35,12 @@ class VideoSliderView: UIView {
     
     internal let leftSlider: SliderView
     internal let rightSlider: SliderView
+    private let centerSlider = UIView(frame: CGRect.zero)
     
     internal var leftPos: CGFloat = 0.0
     internal var rightPos: CGFloat = 0.0
+
+    internal var maxDur: CGFloat = 0.0
 
     private let frameThumb = FrameThumbView(frame: CGRect.zero)
     private let thumbsView = UIView(frame: CGRect.zero)
@@ -93,10 +96,17 @@ class VideoSliderView: UIView {
         
         leftSlider.center = CGPoint(x: leftPos + inset, y: leftSlider.frame.height / 2.0)
         rightSlider.center = CGPoint(x: rightPos - inset, y: rightSlider.frame.height / 2.0)
+        
+        centerSlider.frame = CGRect(x: leftSlider.frame.maxX,
+                                    y: 0.0,
+                                    width: rightSlider.frame.minX - leftSlider.frame.maxX,
+                                    height: frame.height)
     }
     
     //MARK: Private
     private func common_init() {
+        maxDur = posforTime(CMTime(seconds: framesExtractor.duration, preferredTimescale: 600))
+        
         self.addSubview(thumbsView)
         thumbsView.frame = self.bounds
         
@@ -117,6 +127,14 @@ class VideoSliderView: UIView {
         
         self.addSubview(frameThumb)
         frameThumb.frame = CGRect(x: 0.0, y: -80.0, width: 100.0, height: 100.0)
+        
+        centerSlider.frame = CGRect(x: leftSlider.frame.maxX, y: 0.0,
+                                    width: rightSlider.frame.minX - leftSlider.frame.maxX, height: frame.height)
+        centerSlider.backgroundColor = UIColor.clearColor()
+        centerSlider.addGestureRecognizer(UIPanGestureRecognizer(target: self,
+                                                                action: #selector(VideoSliderView.panCenterSlider(_:))))
+
+        self.addSubview(centerSlider)
     }
     
     //MARK: Internal
@@ -136,14 +154,15 @@ class VideoSliderView: UIView {
                 leftPos = 0
             }
 
-            if rightPos - leftPos <= leftSlider.frame.size.width + rightSlider.frame.size.width {
+            if rightPos - leftPos <= leftSlider.frame.size.width + rightSlider.frame.size.width
+                || rightPos - leftPos > maxDur {
                 leftPos -= translation.x
             }
             
             gesture.setTranslation(CGPoint.zero, inView: self)
             self.setNeedsLayout()
             
-            updateVideoThumb(timeForPos(Double(leftPos)))
+            updateVideoThumb(timeForPos(leftPos))
         }
         
         if gesture.state == UIGestureRecognizerState.Ended {
@@ -169,15 +188,38 @@ class VideoSliderView: UIView {
                rightPos -= translation.x
             }
             
-            if rightPos - leftPos <= leftSlider.frame.size.width + rightSlider.frame.size.width {
+            if rightPos - leftPos <= leftSlider.frame.size.width + rightSlider.frame.size.width
+                || rightPos - leftPos > maxDur {
                 rightPos -= translation.x
             }
-
             
             gesture.setTranslation(CGPoint.zero, inView: self)
             self.setNeedsLayout()
             
-            updateVideoThumb(timeForPos(Double(rightPos)))
+            updateVideoThumb(timeForPos(rightPos))
+        }
+        
+        if gesture.state == UIGestureRecognizerState.Ended {
+            hideVideoThumb()
+        }
+    }
+    
+    internal func panCenterSlider(gesture: UIPanGestureRecognizer) {
+        if gesture.state == UIGestureRecognizerState.Began || gesture.state == UIGestureRecognizerState.Changed {
+            let translation = gesture.translationInView(self)
+
+            leftPos += translation.x
+            rightPos += translation.x
+
+            if rightPos > self.frame.width || leftPos < 0 {
+                leftPos -= translation.x
+                rightPos -= translation.x
+            }
+
+            gesture.setTranslation(CGPoint.zero, inView: self)
+            self.setNeedsLayout()
+            
+            updateVideoThumb(timeForPos(leftPos + (rightPos - leftPos) / 2.0))
         }
         
         if gesture.state == UIGestureRecognizerState.Ended {
@@ -207,8 +249,13 @@ class VideoSliderView: UIView {
         frameThumb.hidden = true
     }
     
-    internal func timeForPos(pos: Double) -> CMTime {
-        return CMTime(seconds: (framesExtractor.duration * pos) / Double(self.frame.width),
+    internal func timeForPos(pos: CGFloat) -> CMTime {
+        return CMTime(seconds: (framesExtractor.duration * Double(pos)) / Double(self.frame.width),
                       preferredTimescale: 600)
     }
+    
+    internal func posforTime(time: CMTime) -> CGFloat {
+        return self.frame.width / CGFloat(framesExtractor.duration) * CGFloat(CMTimeGetSeconds(time))
+    }
+
 }

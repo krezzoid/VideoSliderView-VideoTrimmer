@@ -34,12 +34,24 @@ extension VideoSliderView: VideoSliderProtocol {
     
     var leftPosition: CMTime {
         get {
-            return timeForPos(Double(leftPos))
+            return timeForPos(leftPos)
         }
     }
     var rightPosition: CMTime {
         get {
-            return timeForPos(Double(rightPos))
+            return timeForPos(rightPos)
+        }
+    }
+    
+    var maxDuration: Float64 {
+        get {
+            return CMTimeGetSeconds(timeForPos(maxDur))
+        }
+        set {
+            maxDur = posforTime(CMTime(seconds: newValue, preferredTimescale: 600))
+            
+            leftPos = 0.0
+            rightPos = posforTime(CMTime(seconds: newValue, preferredTimescale: 600))
         }
     }
 

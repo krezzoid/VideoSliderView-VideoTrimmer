@@ -46,6 +46,8 @@ class ViewController: UIViewController {
         guard let videoPath = NSBundle.mainBundle().pathForResource("videoFile", ofType: "mov") else { return }
         videoSlider = VideoSliderView(frame: sliderView.frame, videoPath: videoPath)
         videoSlider?.showInView(sliderView)
+        
+//        videoSlider?.maxDuration = 30.0
     }
 
     override func didReceiveMemoryWarning() {

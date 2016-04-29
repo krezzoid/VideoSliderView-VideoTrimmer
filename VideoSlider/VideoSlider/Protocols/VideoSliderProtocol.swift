@@ -36,5 +36,7 @@ protocol VideoSliderProtocol {
     var leftPosition: CMTime { get }
     var rightPosition: CMTime { get }
     
+    var maxDuration: Float64 { get set } // default: video duration
+    
     func showInView(view: UIView)
 }
