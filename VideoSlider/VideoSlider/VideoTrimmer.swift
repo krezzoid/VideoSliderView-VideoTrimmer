@@ -65,4 +65,37 @@ class VideoTrimmer {
             }
         })
     }
+    
+    class func trimAsset(asset: AVAsset, outputFilePath: String,
+                        startTime: CMTime, durationTime: CMTime,
+                        completion: (success: Bool) -> Void) {
+        guard let _ = AVAssetExportSession(asset: asset,
+                                           presetName: AVAssetExportPresetHighestQuality) else {
+                                            completion(success: false)
+                                            return
+        }
+        
+        
+        guard let exportSession = AVAssetExportSession(asset: asset,
+                                                       presetName: AVAssetExportPresetPassthrough) else {
+                                                        completion(success: false)
+                                                        return
+        }
+        
+        exportSession.outputURL = NSURL(fileURLWithPath: outputFilePath)
+        exportSession.outputFileType = AVFileTypeQuickTimeMovie
+        exportSession.timeRange = CMTimeRangeMake(startTime, durationTime)
+        
+        exportSession.exportAsynchronouslyWithCompletionHandler({
+            switch exportSession.status {
+            case AVAssetExportSessionStatus.Failed,
+            AVAssetExportSessionStatus.Cancelled:
+                completion(success: false)
+                
+            default:
+                completion(success: true)
+            }
+        })
+    }
+
 }
