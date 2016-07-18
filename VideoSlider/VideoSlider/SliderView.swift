@@ -49,6 +49,7 @@ class SliderView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // codebeat:disable[LOC,ABC]
     override func drawRect(rect: CGRect) {
         
         //// General Declarations

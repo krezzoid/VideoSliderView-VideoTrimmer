@@ -32,6 +32,7 @@ import AVFoundation
 
 class VideoTrimmer {
 
+    // codebeat:disable[ARITY]
     class func trimFile(filePath: String, outputFilePath: String,
                         startTime: CMTime, durationTime: CMTime,
                         completion: (success: Bool) -> Void) {
@@ -66,6 +67,7 @@ class VideoTrimmer {
         })
     }
     
+    // codebeat:disable[ARITY]
     class func trimAsset(asset: AVAsset, outputFilePath: String,
                         startTime: CMTime, durationTime: CMTime,
                         completion: (success: Bool) -> Void) {
