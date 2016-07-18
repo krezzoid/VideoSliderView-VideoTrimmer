@@ -1,4 +1,5 @@
 # VideoSliderView and VideoTrimmer
+[![codebeat badge](https://codebeat.co/badges/7426444a-24e8-440b-a5f3-e0961003c686)](https://codebeat.co/projects/github-com-krezzoid-videosliderview-videotrimmer)
 
 ### Usage
 ```swift
