@@ -33,8 +33,8 @@ import AVFoundation
 class VideoSliderView: UIView {
     internal let framesExtractor: FramesExtractorProtocol
     
-    internal let leftSlider: SliderView
-    internal let rightSlider: SliderView
+    internal var leftSlider: SliderView!
+    internal var rightSlider: SliderView!
     private let centerSlider = UIView(frame: CGRect.zero)
     
     internal var leftPos: CGFloat = 0.0
@@ -50,35 +50,17 @@ class VideoSliderView: UIView {
     init(frame: CGRect, videoPath: String) {
         framesExtractor = FramesExtractor(videoPath: videoPath)
 
-        let slider_width = frame.size.width * 0.05
-        leftSlider = SliderView(frame: CGRect(x: 0.0, y: 0.0,
-                                                width: slider_width, height: frame.height),
-                                leftCorners: true)
-        rightSlider = SliderView(frame: CGRect(x: frame.size.width - slider_width, y: 0.0,
-                                                width: slider_width, height: frame.height),
-                                 leftCorners: false)
-        rightPos = frame.width
-
         super.init(frame: frame)
         
-        common_init()
+        common_init(frame)
     }
     
     init(frame: CGRect, videoAsset: AVAsset) {
         framesExtractor = FramesExtractor(videoAsset: videoAsset)
         
-        let slider_width = frame.size.width * 0.05
-        leftSlider = SliderView(frame: CGRect(x: 0.0, y: 0.0,
-                                                width: slider_width, height: frame.height),
-                                                                    leftCorners: true)
-        rightSlider = SliderView(frame: CGRect(x: frame.size.width - slider_width, y: 0.0,
-                                                width: slider_width, height: frame.height),
-                                                                     leftCorners: false)
-        rightPos = frame.width
-        
         super.init(frame: frame)
         
-        common_init()
+        common_init(frame)
     }
     
     override init(frame: CGRect) {
@@ -103,8 +85,18 @@ class VideoSliderView: UIView {
                                     height: frame.height)
     }
     
-    //MARK: Private
-    private func common_init() {
+    // MARK: Private
+    // codebeat:disable[ABC]
+    private func common_init(frame: CGRect) {
+        let slider_width = frame.size.width * 0.05
+        leftSlider = SliderView(frame: CGRect(x: 0.0, y: 0.0,
+                                                width: slider_width, height: frame.height),
+                                leftCorners: true)
+        rightSlider = SliderView(frame: CGRect(x: frame.size.width - slider_width, y: 0.0,
+                                                width: slider_width, height: frame.height),
+                                 leftCorners: false)
+        rightPos = frame.width
+
         maxDur = posforTime(CMTime(seconds: framesExtractor.duration, preferredTimescale: 600))
         
         self.addSubview(thumbsView)
